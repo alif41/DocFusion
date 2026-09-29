@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Lock, Mail, User, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, User, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
 import { DocFusionLogo } from '../components/common/DocFusionLogo';
 import { Button } from '../components/common/Button';
 import { useDocumentTitle } from '../hooks/useDocumentTitle';
@@ -22,6 +22,7 @@ export const RegisterPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [isOperationNotAllowed, setIsOperationNotAllowed] = useState(false);
   const [successMsg, setSuccessMsg] = useState('');
 
   // If already logged in, redirect
@@ -76,6 +77,7 @@ export const RegisterPage: React.FC = () => {
 
     setIsLoading(true);
     setErrorMsg('');
+    setIsOperationNotAllowed(false);
 
     try {
       await signUpWithEmail(formData.email, formData.password, formData.name);
@@ -83,7 +85,16 @@ export const RegisterPage: React.FC = () => {
       navigate('/');
     } catch (err: any) {
       console.error('Registration error:', err);
-      if (err.code === 'auth/email-already-in-use') {
+      const isNotAllowed =
+        err?.code === 'auth/operation-not-allowed' ||
+        String(err?.message || '').includes('operation-not-allowed');
+
+      if (isNotAllowed) {
+        setIsOperationNotAllowed(true);
+        setErrorMsg(
+          'Email & Password registration is not enabled in your Firebase console. Please sign up instantly with Google or enable Email/Password provider in the Firebase Console.'
+        );
+      } else if (err.code === 'auth/email-already-in-use') {
         setErrorMsg('An account with this email address already exists. Please sign in instead.');
       } else {
         setErrorMsg(err.message || 'Registration failed. Please try again.');
@@ -95,6 +106,7 @@ export const RegisterPage: React.FC = () => {
 
   const handleGoogleSignIn = async () => {
     setErrorMsg('');
+    setIsOperationNotAllowed(false);
     setIsLoading(true);
     try {
       await signInWithGoogle();
@@ -126,11 +138,62 @@ export const RegisterPage: React.FC = () => {
 
         {/* Card Box */}
         <div className="rounded-3xl border border-slate-200 dark:border-[#222234] bg-white dark:bg-[#0c0c14] p-6 sm:p-8 shadow-xl dark:shadow-2xl dark:shadow-black/80 space-y-6">
-          {errorMsg && (
+          {isOperationNotAllowed ? (
+            <div className="p-4 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 text-amber-900 dark:text-amber-200 text-xs space-y-3">
+              <div className="flex items-start gap-2.5">
+                <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <h4 className="font-semibold text-amber-900 dark:text-amber-300 text-sm">
+                    Email/Password Provider Is Disabled
+                  </h4>
+                  <p className="text-slate-600 dark:text-neutral-300 leading-relaxed">
+                    By default, this Firebase project has <strong>Google Authentication</strong> enabled. Email/Password provider is not activated in the Firebase Console.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white/80 dark:bg-black/30 rounded-xl p-3 space-y-2 border border-amber-200 dark:border-white/5">
+                <p className="text-slate-800 dark:text-white font-medium flex items-center gap-1.5">
+                  <span className="w-4 h-4 rounded-full bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center">
+                    ✓
+                  </span>
+                  <span>Instant Sign Up: Use your Google account</span>
+                </p>
+                <button
+                  type="button"
+                  onClick={handleGoogleSignIn}
+                  disabled={isLoading}
+                  className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-semibold text-xs transition-colors cursor-pointer shadow-sm disabled:opacity-50"
+                >
+                  <span>Continue with Google</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              <div className="text-[11px] text-slate-600 dark:text-neutral-400 space-y-1 pt-1 border-t border-amber-200 dark:border-amber-500/20">
+                <p className="text-slate-700 dark:text-neutral-300 font-medium">To enable Email/Password registration:</p>
+                <ol className="list-decimal list-inside space-y-0.5">
+                  <li>
+                    Open the{' '}
+                    <a
+                      href="https://console.firebase.google.com/project/regal-cubist-hcb1c/authentication/providers"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-amber-700 dark:text-amber-400 underline font-mono"
+                    >
+                      Firebase Console
+                    </a>
+                  </li>
+                  <li>Click <strong>Authentication &gt; Sign-in method</strong></li>
+                  <li>Click <strong>Email/Password</strong>, toggle <strong>Enable</strong>, and Save.</li>
+                </ol>
+              </div>
+            </div>
+          ) : errorMsg ? (
             <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/25 text-rose-700 dark:text-rose-300 text-xs">
               {errorMsg}
             </div>
-          )}
+          ) : null}
 
           {successMsg && (
             <div className="p-3 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/25 text-emerald-700 dark:text-emerald-300 text-xs flex items-center gap-2">
@@ -141,6 +204,14 @@ export const RegisterPage: React.FC = () => {
 
           {/* Social SSO */}
           <div>
+            <div className="mb-2 flex items-center justify-between">
+              <span className="text-xs font-mono uppercase text-slate-500 dark:text-neutral-400">
+                Fast Sign-Up
+              </span>
+              <span className="text-[10px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                Active &amp; Ready
+              </span>
+            </div>
             <button
               type="button"
               onClick={handleGoogleSignIn}
