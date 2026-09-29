@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%" fill="none">
+  <!-- DocFusion Modern Brand Icon -->
+  <defs>
+    <!-- Ambient Glow -->
+    <filter id="dfIconGlow" x="-20%" y="-20%" width="140%" height="140%" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Back Document Sheet Gradient -->
+    <linearGradient id="dfBackSheet" x1="15%" y1="10%" x2="85%" y2="90%">
+      <stop offset="0%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#4f46e5" />
+    </linearGradient>
+
+    <!-- Front Sheet / Overlap Fusion Gradient -->
+    <linearGradient id="dfFrontSheet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="60%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+
+    <!-- Dynamic Electric Fusion Core Ribbon -->
+    <linearGradient id="dfFusionRibbon" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="50%" stop-color="#a855f7" />
+      <stop offset="100%" stop-color="#ec4899" />
+    </linearGradient>
+
+    <!-- Glassmorphic Sheet Stroke -->
+    <linearGradient id="dfStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.2" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background Glow -->
+  <circle cx="60" cy="60" r="42" fill="#7c3aed" opacity="0.25" filter="url(#dfIconGlow)" />
+
+  <!-- Layer 1: Back Document Sheet -->
+  <g transform="rotate(-6 60 60)">
+    <rect x="26" y="20" width="54" height="76" rx="10" fill="url(#dfBackSheet)" opacity="0.85" />
+    <path d="M 64 20 L 80 36 L 64 36 Z" fill="#4338ca" opacity="0.9" />
+  </g>
+
+  <!-- Layer 2: Front Translucent Document Sheet -->
+  <g transform="rotate(4 60 60)">
+    <rect x="40" y="24" width="54" height="76" rx="10" fill="url(#dfFrontSheet)" fill-opacity="0.92" stroke="url(#dfStroke)" stroke-width="1.5" />
+    <rect x="49" y="44" width="22" height="3" rx="1.5" fill="#ffffff" fill-opacity="0.75" />
+    <rect x="49" y="52" width="34" height="3" rx="1.5" fill="#ffffff" fill-opacity="0.45" />
+    <rect x="49" y="60" width="28" height="3" rx="1.5" fill="#ffffff" fill-opacity="0.45" />
+  </g>
+
+  <!-- Layer 3: Fusing Energy Ribbon -->
+  <path d="M 28 82 C 34 62 48 50 64 54 C 80 58 84 76 96 66 C 102 60 102 46 96 38" stroke="url(#dfFusionRibbon)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Sparkling Center Node -->
+  <circle cx="64" cy="54" r="4.5" fill="#ffffff" />
+  <circle cx="64" cy="54" r="2.5" fill="#38bdf8" />
+  <circle cx="96" cy="38" r="3" fill="#38bdf8" />
+  <circle cx="28" cy="82" r="3" fill="#a855f7" />
+</svg>

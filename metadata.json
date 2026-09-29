@@ -1,0 +1,6 @@
+{
+  "name": "DocFusion",
+  "description": "The modern, all-in-one document and PDF platform architecture engineered for speed, privacy, and seamless workflow integration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,51 @@
+{
+  "entities": {
+    "UserProfile": {
+      "collection": "users",
+      "fields": {
+        "uid": { "type": "string", "required": true, "description": "Firebase Auth user ID" },
+        "email": { "type": "string", "required": true, "description": "User email address" },
+        "displayName": { "type": "string", "required": false, "description": "Full name or display name" },
+        "photoURL": { "type": "string", "required": false, "description": "Avatar photo URL" },
+        "createdAt": { "type": "timestamp", "required": true, "description": "Account registration timestamp" },
+        "updatedAt": { "type": "timestamp", "required": false, "description": "Last profile update timestamp" },
+        "role": { "type": "string", "required": true, "description": "User role (admin or user)" }
+      }
+    },
+    "DocumentRecord": {
+      "collection": "documents",
+      "fields": {
+        "id": { "type": "string", "required": true, "description": "Document record unique ID" },
+        "userId": { "type": "string", "required": true, "description": "Owner user ID" },
+        "title": { "type": "string", "required": true, "description": "Document name or filename" },
+        "toolType": { "type": "string", "required": true, "description": "Tool used: merge, split, compress, or edit" },
+        "pageCount": { "type": "number", "required": false, "description": "Total pages in processed document" },
+        "originalSize": { "type": "number", "required": false, "description": "Original file size in bytes" },
+        "finalSize": { "type": "number", "required": false, "description": "Processed file size in bytes" },
+        "savedBytes": { "type": "number", "required": false, "description": "Bytes saved if compressed" },
+        "createdAt": { "type": "timestamp", "required": true, "description": "Timestamp when document was processed" },
+        "metadata": { "type": "map", "required": false, "description": "Arbitrary metadata for tool options" }
+      }
+    },
+    "SavedSignature": {
+      "collection": "signatures",
+      "fields": {
+        "id": { "type": "string", "required": true, "description": "Signature record ID" },
+        "userId": { "type": "string", "required": true, "description": "Owner user ID" },
+        "label": { "type": "string", "required": true, "description": "Signature name/label" },
+        "dataUrl": { "type": "string", "required": true, "description": "Base64 PNG data URL of signature" },
+        "createdAt": { "type": "timestamp", "required": true, "description": "Creation timestamp" }
+      }
+    },
+    "ActivityLog": {
+      "collection": "activityLogs",
+      "fields": {
+        "id": { "type": "string", "required": true, "description": "Log record ID" },
+        "userId": { "type": "string", "required": true, "description": "User who performed action" },
+        "action": { "type": "string", "required": true, "description": "Action performed" },
+        "details": { "type": "string", "required": false, "description": "Human-readable details" },
+        "timestamp": { "type": "timestamp", "required": true, "description": "Log timestamp" }
+      }
+    }
+  }
+}
